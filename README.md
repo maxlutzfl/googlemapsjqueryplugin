@@ -25,7 +25,7 @@ $('.map').bcore_google_maps({
 				</div>';
 	},
 	on_infowindow_open: function(cb) {
-		
+		console.log(cb); // returns { i: index, infobox_data: infobox_data }
 	},
 	on_infowindow_close: function(cb) {
 		
