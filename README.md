@@ -36,6 +36,12 @@ $('.map').bcore_google_maps({
 });
 ```
 
-```
-<div data-marker-trigger="0">This will also trigger mouseover, mouseout and click functionality of the marker</div>
+```twig
+{% for location in locations %}
+	<li><a href="#" data-marker-trigger="{{ loop.index0 }}" data-location="{{ { 
+		lat: 0, 
+		lng: 0, 
+		infowindow_data: { title: '': desc: '' } } 
+	}}">{{ location.title }}</a></li>
+{% endfor %}
 ```
