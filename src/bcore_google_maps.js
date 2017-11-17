@@ -62,8 +62,8 @@ $.fn.bcore_google_maps = function(args) {
 
 						infowindow.i = i;
 						infowindow.opened = true;
-						infowindow.infobox_data = args.markers[i].infobox_data;
-						infowindow.setContent(args.infobox_template(args.markers[i].infobox_data));
+						infowindow.infowindow_data = args.markers[i].infowindow_data;
+						infowindow.setContent(args.infobox_template(args.markers[i].infowindow_data));
 						infowindow.open(map, marker);
 						args.on_infowindow_open({
 							i: infowindow.i,
@@ -91,7 +91,7 @@ $.fn.bcore_google_maps = function(args) {
 				var markerClick = function() {
 					args.on_marker_click({
 						i: infowindow.i,
-						infobox_data: infowindow.infobox_data
+						infowindow_data: infowindow.infowindow_data
 					});
 				}
 

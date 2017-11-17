@@ -14,18 +14,18 @@ $('.map').bcore_google_maps({
 	],
 	cluster: true,
 	markers: [
-		{ lat: 1, lng: 1, infobox_data: { title: "", desc: "" } },
-		{ lat: 2, lng: 2, infobox_data: { title: "", desc: "" } },
-		{ lat: 3, lng: 3, infobox_data: { title: "", desc: "" } }
+		{ lat: 1, lng: 1, infowindow_data: { title: "", desc: "" } },
+		{ lat: 2, lng: 2, infowindow_data: { title: "", desc: "" } },
+		{ lat: 3, lng: 3, infowindow_data: { title: "", desc: "" } }
 	]
-	infobox_template: function(infobox_data) {
+	infobox_template: function(infowindow_data) {
 		return '<div> \
-					<h1>' + infobox_data.title + '</h1> \
-					<p>' + infobox_data.desc + '</p> \
+					<h1>' + infowindow_data.title + '</h1> \
+					<p>' + infowindow_data.desc + '</p> \
 				</div>';
 	},
 	on_infowindow_open: function(cb) {
-		console.log(cb); // returns { i: index, infobox_data: infobox_data }
+		console.log(cb); // returns { i: index, infowindow_data: infowindow_data }
 	},
 	on_infowindow_close: function(cb) {
 		
