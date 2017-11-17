@@ -1,0 +1,236 @@
+<!-- 
+	TODO
+		- Polygons/polylines
+		- Hover should display the infowindow
+		- Click on marker should do nothing but in the app the dev can make it open a link that is passed in
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<link rel="stylesheet" href="">
+	<style>
+		.map {
+			height: 500px;
+			width: 100%;
+			background: #eee;
+		}
+
+		.active {
+			background-color: #eee;
+		}
+
+		a {
+			transition: 300ms;
+			position: relative;
+			left: 0;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="map"></div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<script>
+		;(function($) {
+
+			$.fn.map = function(args) {
+					
+				return this.each(function(index) {
+
+					var container = this;
+					var googleapi = 'https://maps.googleapis.com/maps/api/js?key=' + args.api_key;
+					var googleapi_cluster = 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js';
+
+					$.getScript(googleapi, function() {
+
+						var options = {
+							scrollwheel: false,
+							center: new google.maps.LatLng(args.lat, args.lng),
+							zoom: args.zoom,
+							mapTypeId: google.maps.MapTypeId.ROADMAP,
+							styles: args.styles,
+						}
+
+						var map = new google.maps.Map(container, options);
+
+						var bounds = new google.maps.LatLngBounds();
+
+						var infowindow = new google.maps.InfoWindow({
+							buttons: { 
+								close: { visible: false }  
+							} 
+						});
+
+						var icon = {
+							url: args.marker_icon,
+							size: new google.maps.Size(args.marker_icon_w, args.marker_icon_h),
+							scaledSize: new google.maps.Size(args.marker_icon_w, args.marker_icon_h)
+						};
+
+						var marker;
+						var markers = [];
+
+						for (var i = 0; i < args.markers.length; i++) { 
+
+							marker = new google.maps.Marker({
+								position: new google.maps.LatLng(args.markers[i].lat, args.markers[i].lng),
+								map: map,
+								icon: icon,
+							});
+
+							markers.push(marker);
+
+							bounds.extend(marker.position);
+
+							var openInfoWindow = (function(marker, i) {
+
+								return function() {
+
+									if (infowindow.opened) {
+										args.on_infowindow_close({
+											i: infowindow.i
+										});
+										infowindow.opened = false;
+										infowindow.close();
+									}
+
+									infowindow.i = i;
+									infowindow.opened = true;
+									infowindow.infobox_data = args.markers[i].infobox_data;
+									infowindow.setContent(args.infobox_template(args.markers[i].infobox_data));
+									infowindow.open(map, marker);
+									args.on_infowindow_open({
+										i: infowindow.i,
+										marker: args.markers[i]
+									});
+								}
+							})(marker, i);
+
+
+							marker.addListener('mouseover', openInfoWindow);
+
+							if (document.querySelector('[data-marker-trigger="' + i + '"]')) {
+								document.querySelector('[data-marker-trigger="' + i + '"]').addEventListener('click', openInfoWindow);
+							}
+
+							var closeInfoWindow = function(event) {
+
+								if (infowindow.opened) {
+									args.on_infowindow_close({
+										i: infowindow.i
+									});
+									infowindow.opened = false;
+									infowindow.close();
+								}
+							};
+
+							marker.addListener('mouseout', closeInfoWindow);
+							marker.addListener('click', function(event) {
+								args.on_marker_click({
+									i: infowindow.i,
+									infobox_data: infowindow.infobox_data
+								});
+							});
+
+						}
+
+						if (args.cluster) {
+
+							$.getScript(googleapi_cluster, function() {
+
+								var clusterOptions = {
+									gridSize: 40,
+									maxZoom: 15,
+									styles: [{
+										width: 40,
+										height: 40,
+										url: 'data:image/svg+xml;base64,' + window.btoa('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><path fill="#333333" stroke="#333333" stroke-width="10" stroke-opacity="0.25" d="M15,5c5.524,0,10,4.478,10,10s-4.478,10-10,10S5,20.522,5,15S9.478,5,15,5z"/></svg>'),
+										textColor: 'white',
+										textSize: 13
+									}]
+								}
+
+								var markerCluster = new MarkerClusterer(map, markers, clusterOptions);
+							});
+						}
+
+						map.fitBounds(bounds);
+					});
+				});
+			}
+
+			$(document).ready(function() {
+
+				var locations = $('[data-location]');
+				var markers = [];
+
+				for (var i = 0; i < locations.length; i++) {
+					markers.push(JSON.parse($(locations[i]).attr('data-location')));
+				}
+
+				$('.map').map({
+					api_key: 'AIzaSyAQlXWJJNQKqRNvQMtdRt2GUs0SthnwSOI',
+					lat: 40.741895,
+					lng: -73.989308,
+					zoom: 14,
+					style: null,
+					marker_icon: 'http://www.myiconfinder.com/uploads/iconsets/256-256-6096188ce806c80cf30dca727fe7c237.png',
+					marker_icon_w: 60,
+					marker_icon_h: 60,
+					styles: null,
+					cluster: true,
+					on_infowindow_open: function(callback) {
+						console.log('on_infowindow_open', callback);
+
+						var link = $('[data-location]').get(callback.i);
+						$(link).addClass('active');
+					},
+					on_infowindow_close: function(callback) {
+						console.log('on_infowindow_close', callback);
+
+						var link = $('[data-location]').get(callback.i);
+						$(link).removeClass('active');
+					},
+					on_marker_click: function(callback) {
+						console.log('on_marker_click', callback);
+
+						var link = $('[data-location]').get(callback.i);
+
+						$(link).css({
+							'left': '30px' 
+						});
+
+						setTimeout(function() {
+							$(link).removeAttr('style');
+						}, 500);
+						
+					},
+					infobox_template: function(args) {
+						return '<div> \
+									<h2>' + args.title + '</h2> \
+									<p>' + args.desc + '</p> \
+								</div>';
+					},
+					markers: markers
+				});
+
+			});
+			
+		})(jQuery);
+	</script>
+
+	<ul>
+		<li><a href="#" data-marker-trigger="0" data-location='{ "lat": -34.890341, "lng": 150.274754, "infobox_data": { "title": "Location 1", "desc": "Location 1 is an awesome place" } }'>Location 1</a></li>
+		<li><a href="#" data-marker-trigger="1" data-location='{ "lat": -34.890260, "lng": 150.274654, "infobox_data": { "title": "Location 2", "desc": "Location 2 is an awesome place" } }'>Location 2</a></li>
+		<li><a href="#" data-marker-trigger="2" data-location='{ "lat": -34.890580, "lng": 150.274554, "infobox_data": { "title": "Location 3", "desc": "Location 3 is an awesome place" } }'>Location 3</a></li>
+		<li><a href="#" data-marker-trigger="3" data-location='{ "lat": -34.890100, "lng": 150.274454, "infobox_data": { "title": "Location 4", "desc": "Location 4 is an awesome place" } }'>Location 4</a></li>
+		<li><a href="#" data-marker-trigger="4" data-location='{ "lat": -34.890441, "lng": 150.274354, "infobox_data": { "title": "Location 5", "desc": "Location 5 is an awesome place" } }'>Location 5</a></li>
+	</ul>
+
+</body>
+</html>
