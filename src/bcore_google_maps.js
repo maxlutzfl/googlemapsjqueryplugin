@@ -38,6 +38,7 @@ $.fn.bcore_google_maps = function(args) {
 			for (var i = 0; i < args.markers.length; i++) { 
 
 				marker = new google.maps.Marker({
+					animation: google.maps.Animation.DROP,
 					position: new google.maps.LatLng(args.markers[i].lat, args.markers[i].lng),
 					map: map,
 					icon: icon,
@@ -74,10 +75,6 @@ $.fn.bcore_google_maps = function(args) {
 
 				marker.addListener('mouseover', openInfoWindow);
 
-				if (document.querySelector('[data-marker-trigger="' + i + '"]')) {
-					document.querySelector('[data-marker-trigger="' + i + '"]').addEventListener('click', openInfoWindow);
-				}
-
 				var closeInfoWindow = function(event) {
 
 					if (infowindow.opened) {
@@ -90,12 +87,21 @@ $.fn.bcore_google_maps = function(args) {
 				};
 
 				marker.addListener('mouseout', closeInfoWindow);
-				marker.addListener('click', function(event) {
+
+				var markerClick = function() {
 					args.on_marker_click({
 						i: infowindow.i,
 						infobox_data: infowindow.infobox_data
 					});
-				});
+				}
+
+				marker.addListener('click', markerClick);
+
+				if (document.querySelector('[data-marker-trigger="' + i + '"]')) {
+					document.querySelector('[data-marker-trigger="' + i + '"]').addEventListener('mouseover', openInfoWindow);
+					document.querySelector('[data-marker-trigger="' + i + '"]').addEventListener('mouseout', closeInfoWindow);
+					document.querySelector('[data-marker-trigger="' + i + '"]').addEventListener('click', markerClick);
+				}
 
 			}
 

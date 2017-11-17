@@ -35,3 +35,7 @@ $('.map').bcore_google_maps({
 	}
 });
 ```
+
+```
+<div data-marker-trigger="0">This will also trigger mouseover, mouseout and click functionality of the marker</div>
+```
