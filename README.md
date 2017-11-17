@@ -1,6 +1,6 @@
 ## Args
 ```js
-api_key: "string",
+api_key: "fhaskjehfkajsehfkjhse",
 lat: 0,
 lng: 0,
 zoom: 13,
@@ -8,7 +8,7 @@ marker_icon: 'marker.png',
 marker_icon_w: 20,
 marker_icon_h: 20,
 styles: [
-	find_awesome_styles_here: "https://snazzymaps.com/explore"
+	{ find_awesome_styles_here: "https://snazzymaps.com/explore" }
 ],
 cluster: true,
 markers: [
