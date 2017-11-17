@@ -34,11 +34,11 @@
 	<div class="map"></div>
 
 	<ul>
-		<li><a href="#" data-marker-trigger="0" data-location='{ "lat": -34.890341, "lng": 150.274754, "infobox_data": { "title": "Location 1", "desc": "Location 1 is an awesome place" } }'>Location 1</a></li>
-		<li><a href="#" data-marker-trigger="1" data-location='{ "lat": -34.890260, "lng": 150.274654, "infobox_data": { "title": "Location 2", "desc": "Location 2 is an awesome place" } }'>Location 2</a></li>
-		<li><a href="#" data-marker-trigger="2" data-location='{ "lat": -34.890580, "lng": 150.274554, "infobox_data": { "title": "Location 3", "desc": "Location 3 is an awesome place" } }'>Location 3</a></li>
-		<li><a href="#" data-marker-trigger="3" data-location='{ "lat": -34.890100, "lng": 150.274454, "infobox_data": { "title": "Location 4", "desc": "Location 4 is an awesome place" } }'>Location 4</a></li>
-		<li><a href="#" data-marker-trigger="4" data-location='{ "lat": -34.890441, "lng": 150.274354, "infobox_data": { "title": "Location 5", "desc": "Location 5 is an awesome place" } }'>Location 5</a></li>
+		<li><a href="#" data-marker-trigger="0" data-location='{ "lat": -34.890341, "lng": 150.274754, "infowindow_data": { "title": "Location 1", "desc": "Location 1 is an awesome place" } }'>Location 1</a></li>
+		<li><a href="#" data-marker-trigger="1" data-location='{ "lat": -34.890260, "lng": 150.274654, "infowindow_data": { "title": "Location 2", "desc": "Location 2 is an awesome place" } }'>Location 2</a></li>
+		<li><a href="#" data-marker-trigger="2" data-location='{ "lat": -34.890580, "lng": 150.274554, "infowindow_data": { "title": "Location 3", "desc": "Location 3 is an awesome place" } }'>Location 3</a></li>
+		<li><a href="#" data-marker-trigger="3" data-location='{ "lat": -34.890100, "lng": 150.274454, "infowindow_data": { "title": "Location 4", "desc": "Location 4 is an awesome place" } }'>Location 4</a></li>
+		<li><a href="#" data-marker-trigger="4" data-location='{ "lat": -34.890441, "lng": 150.274354, "infowindow_data": { "title": "Location 5", "desc": "Location 5 is an awesome place" } }'>Location 5</a></li>
 	</ul>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -93,7 +93,7 @@
 						}, 500);
 						
 					},
-					infobox_template: function(args) {
+					infowindow_template: function(args) {
 						return '<div> \
 									<h2>' + args.title + '</h2> \
 									<p>' + args.desc + '</p> \

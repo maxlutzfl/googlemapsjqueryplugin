@@ -18,7 +18,7 @@ $('.map').bcore_google_maps({
 		{ lat: 2, lng: 2, infowindow_data: { title: "", desc: "" } },
 		{ lat: 3, lng: 3, infowindow_data: { title: "", desc: "" } }
 	]
-	infobox_template: function(infowindow_data) {
+	infowindow_template: function(infowindow_data) {
 		return '<div> \
 					<h1>' + infowindow_data.title + '</h1> \
 					<p>' + infowindow_data.desc + '</p> \
