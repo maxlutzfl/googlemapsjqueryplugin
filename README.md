@@ -38,10 +38,12 @@ $('.map').bcore_google_maps({
 
 ```twig
 {% for location in locations %}
-	<li><a href="#" data-marker-trigger="{{ loop.index0 }}" data-location="{{ { 
-		lat: 0, 
-		lng: 0, 
-		infowindow_data: { title: '': desc: '' } } 
+	<li><a href="#" data-marker-trigger="{{ loop.index0 }}" data-location="{{ 
+		{ 
+			lat: 0, 
+			lng: 0, 
+			infowindow_data: { title: '': desc: '' }
+		}|stringify 
 	}}">{{ location.title }}</a></li>
 {% endfor %}
 ```
