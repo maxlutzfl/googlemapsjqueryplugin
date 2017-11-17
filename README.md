@@ -1,4 +1,5 @@
-## Args
+# Google Maps jQuery Plugin
+
 ```js
 $('.map').bcore_google_maps({
 	api_key: "fhaskjehfkajsehfkjhse",
