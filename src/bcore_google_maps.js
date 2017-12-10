@@ -33,6 +33,7 @@ $.fn.bcore_google_maps = function(args) {
 			};
 
 			var marker;
+
 			var markers = [];
 
 			for (var i = 0; i < args.markers.length; i++) { 
@@ -51,15 +52,6 @@ $.fn.bcore_google_maps = function(args) {
 				var openInfoWindow = (function(marker, i) {
 
 					return function() {
-
-						if (infowindow.opened) {
-							args.on_infowindow_close({
-								i: infowindow.i
-							});
-							infowindow.opened = false;
-							infowindow.close();
-						}
-
 						infowindow.i = i;
 						infowindow.opened = true;
 						infowindow.infowindow_data = args.markers[i].infowindow_data;
@@ -72,9 +64,6 @@ $.fn.bcore_google_maps = function(args) {
 					}
 				})(marker, i);
 
-
-				marker.addListener('mouseover', openInfoWindow);
-
 				var closeInfoWindow = function(event) {
 
 					if (infowindow.opened) {
@@ -86,15 +75,15 @@ $.fn.bcore_google_maps = function(args) {
 					}
 				};
 
-				marker.addListener('mouseout', closeInfoWindow);
-
 				var markerClick = function() {
 					args.on_marker_click({
 						i: infowindow.i,
 						infowindow_data: infowindow.infowindow_data
 					});
 				}
-
+				
+				marker.addListener('mouseover', openInfoWindow);
+				marker.addListener('mouseout', closeInfoWindow);
 				marker.addListener('click', markerClick);
 
 				if (document.querySelector('[data-marker-trigger="' + i + '"]')) {
@@ -102,8 +91,10 @@ $.fn.bcore_google_maps = function(args) {
 					document.querySelector('[data-marker-trigger="' + i + '"]').addEventListener('mouseout', closeInfoWindow);
 					document.querySelector('[data-marker-trigger="' + i + '"]').addEventListener('click', markerClick);
 				}
-
 			}
+
+			map.fitBounds(bounds);
+
 
 			if (args.cluster) {
 
@@ -124,8 +115,6 @@ $.fn.bcore_google_maps = function(args) {
 					var markerCluster = new MarkerClusterer(map, markers, clusterOptions);
 				});
 			}
-
-			map.fitBounds(bounds);
 		});
 	});
 }
