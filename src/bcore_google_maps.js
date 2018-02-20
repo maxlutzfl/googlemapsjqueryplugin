@@ -89,12 +89,15 @@ $.fn.bcore_google_maps = function(args) {
 				if (document.querySelector('[data-marker-trigger="' + i + '"]')) {
 					document.querySelector('[data-marker-trigger="' + i + '"]').addEventListener('mouseover', openInfoWindow);
 					document.querySelector('[data-marker-trigger="' + i + '"]').addEventListener('mouseout', closeInfoWindow);
-					document.querySelector('[data-marker-trigger="' + i + '"]').addEventListener('click', markerClick);
+					// document.querySelector('[data-marker-trigger="' + i + '"]').addEventListener('click', markerClick);
 				}
 			}
 
 			map.fitBounds(bounds);
 
+			google.maps.event.addListener(infowindow, 'domready', function() {
+				jQuery('.gm-style-iw').parent().addClass('gm-style-iw-container');
+			});
 
 			if (args.cluster) {
 
